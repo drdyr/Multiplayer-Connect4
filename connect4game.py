@@ -3,8 +3,7 @@ import pygame
 
 class Game:
     def __init__(self, id):
-        self.p1Turn = True
-        self.p2Turn = False
+        self.turn = 1
         self.ready = False
         self.id = id
         self.slots = []

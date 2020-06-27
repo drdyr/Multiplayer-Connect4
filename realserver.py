@@ -61,13 +61,13 @@ while True:
     print("Connected to:", addr)
 
     idCount += 1
-    p = 0
+    p = 1
     gameId = (idCount - 1)//2
     if idCount % 2 == 1:
         games[gameId] = Game(gameId)
         print("Creating a new game...")
     else:
         games[gameId].ready = True
-        p = 1
+        p = 2
 
     start_new_thread(threaded_client, (conn, p, gameId))
