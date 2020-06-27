@@ -67,7 +67,6 @@ class Disk:
         self.rect = (100 * self.x + 15, 100 * self.y + 15, 70, 70)
 
     def draw(self):
-        print("drawing disk")
         self.rect = (100 * self.x + 15, 100 * self.y + 35, 70, 70)
         pygame.draw.ellipse(screen, self.colour, self.rect)
 
@@ -101,7 +100,7 @@ while True:
             sys.exit()
         if event.type == pygame.MOUSEBUTTONDOWN:
             for entry_slot in board.entry_slots:
-                if entry_slot.is_cursor():
+                if entry_slot.is_cursor() and Disk(entry_slot.x, 0, red) not in board.disks:
                     if turn % 2 == 1:
                         board.add_disk(Disk(entry_slot.x, 0, red))
                         turn += 1
