@@ -29,26 +29,24 @@ class Board:
             disk.draw()
 
     def check_win(self, disk):
-        count = 0
         colour = disk.colour
         next_disk = disk
         directions = [(0, 1), (1, 1), (1, 0), (1, -1)]
         for direction in directions:
             count = 0
             while next_disk.colour == colour:
-                if Disk(next_disk.x + direction[0], next_disk.y + direction[1], next_disk.colour) in self.disks:
-                    next_disk = self.disks[
-                        self.disks.index(Disk(next_disk.x + direction[0], next_disk.y + direction[1], next_disk.colour))]
+                candidate = Disk(next_disk.x + direction[0], next_disk.y + direction[1], next_disk.colour)
+                if candidate in self.disks:
+                    next_disk = self.disks[self.disks.index(candidate)]
                     if next_disk.colour == colour:
                         count += 1
                 else:
                     break
             next_disk = disk
             while next_disk.colour == colour:
-                if Disk(next_disk.x + (direction[0] * -1), next_disk.y + (direction[1] * -1), next_disk.colour) in self.disks:
-                    next_disk = self.disks[
-                        self.disks.index(
-                            Disk(next_disk.x + (direction[0] * -1), next_disk.y + (direction[1] * -1), next_disk.colour))]
+                candidate = Disk(next_disk.x + (direction[0] * -1), next_disk.y + (direction[1] * -1), next_disk.colour)
+                if candidate in self.disks:
+                    next_disk = self.disks[self.disks.index(candidate)]
                     if next_disk.colour == colour:
                         count += 1
                 else:
@@ -108,6 +106,8 @@ class Disk:
     def update(self):
         while self.y < 5 and Disk(self.x, self.y + 1, red) not in board.disks:
             self.y += 1
+
+
 
 
 white = (255, 255, 255)
