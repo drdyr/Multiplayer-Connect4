@@ -3,7 +3,7 @@ from _thread import *
 import pickle
 from connect4game import Game, Disk, Slot, EntrySlot
 
-server = "192.168.1.252"
+server = "localhost"
 port = 5555
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
