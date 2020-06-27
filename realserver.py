@@ -14,6 +14,7 @@ except socket.error as e:
     str(e)
 
 s.listen(2)
+print("Waiting for a connection, Server Started")
 
 connected = set()
 games = {}
@@ -35,10 +36,8 @@ def threaded_client(conn, p, gameId):
                 if not data:
                     break
                 else:
-                    if data == "reset":
-                        pass
-                    elif data != "get":
-                        conn.sendall(pickle.dumps(game))
+                    conn.sendall(pickle.dumps(game))
+
             else:
                 break
         except:
