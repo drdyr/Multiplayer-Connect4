@@ -16,6 +16,7 @@ class Board:
                 self.slots.append(Slot(i, j))
 
     def add_disk(self, disk):
+        disk.update()
         self.disks.append(disk)
 
     def draw(self):
@@ -58,11 +59,6 @@ class EntrySlot:
         return self.x * 100 < pygame.mouse.get_pos()[0] < (self.x + 1) * 100 and 0 < pygame.mouse.get_pos()[1] < 20
 
 
-def update_disks():
-    for disk in board.disks:
-        disk.update()
-    update_disks()
-
 class Disk:
     def __init__(self, x, y, colour):
         self.x = x
@@ -79,7 +75,7 @@ class Disk:
         return self.x == other.x and self.y == other.y
 
     def update(self):
-        if self.y < 5 and Disk(self.x, self.y + 1, red) not in board.disks:
+        while self.y < 5 and Disk(self.x, self.y + 1, red) not in board.disks:
             self.y += 1
 
 
@@ -94,6 +90,8 @@ green = (0, 255, 0)
 screen = pygame.display.set_mode((700, 620))
 screen.fill(blue)
 
+turn = 1
+
 board = Board()
 
 while True:
@@ -104,7 +102,12 @@ while True:
         if event.type == pygame.MOUSEBUTTONDOWN:
             for entry_slot in board.entry_slots:
                 if entry_slot.is_cursor():
-                    board.add_disk(Disk(entry_slot.x, 0, red))
+                    if turn % 2 == 1:
+                        board.add_disk(Disk(entry_slot.x, 0, red))
+                        turn += 1
+                    else:
+                        board.add_disk(Disk(entry_slot.x, 0, yellow))
+                        turn += 1
 
     board.draw()
     pygame.display.flip()
