@@ -18,6 +18,9 @@ class Board:
     def add_disk(self, disk):
         disk.update()
         self.disks.append(disk)
+        # if self.check_win(disk):
+        #      pygame.quit()
+        #      sys.exit()
 
     def draw(self):
         for slot in self.slots:
@@ -26,6 +29,31 @@ class Board:
             entry_slot.draw()
         for disk in self.disks:
             disk.draw()
+
+    # def get_neighbours(self, disk):
+    #     neighbours = []
+    #     for i in range(-1, 2):
+    #         for j in range(-1, 2):
+    #             if Disk(disk.x + i, disk.y + j, red) in self.disks and (i != 0 and j != 0):
+    #                 neighbour = self.disks[self.disks.index(Disk(disk.x + i, disk.y + j, red))]
+    #                 if neighbour.colour == disk.colour:
+    #                     neighbours.append(self.disks[self.disks.index(Disk(disk.x + i, disk.y + j, red))])
+    #     return neighbours
+    #
+    # def check_win(self, disk):
+    #     for neighbour in self.get_neighbours(disk):
+    #         if self.diverge(neighbour, neighbour.x - disk.x, neighbour.y - disk.y, 1):
+    #             return True
+    #     return False
+    #
+    # def diverge(self, disk, dir1, dir2, count):
+    #     if count > 4:
+    #         return True
+    #     else:
+    #         check_disk = Disk(disk.x + dir1, disk.y + dir2, red)
+    #         if check_disk in self.disks and self.disks[self.disks.index(check_disk)].colour == disk.colour:
+    #             self.diverge(check_disk, dir1, dir2, count + 1)
+
 
 class Slot:
     def __init__(self, x, y):
@@ -107,7 +135,6 @@ while True:
                     else:
                         board.add_disk(Disk(entry_slot.x, 0, yellow))
                         turn += 1
-
     board.draw()
     pygame.display.flip()
     clock.tick(60)
