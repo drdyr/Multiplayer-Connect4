@@ -21,8 +21,10 @@ class Game:
     def add_disk(self, disk):
         disk.update(self)
         self.disks.append(disk)
+        self.turn += 1
         if self.check_win(disk):
             self.won = True
+
 
     def draw(self, screen):
         for slot in self.slots:

@@ -55,7 +55,7 @@ def main():
                 pygame.quit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 for entry_slot in game.entry_slots:
-                    if entry_slot.is_cursor() and Disk(entry_slot.x, 0, red) not in game.disks and not game.won:
+                    if entry_slot.is_cursor() and Disk(entry_slot.x, 0, red) not in game.disks and not game.won and (game.turn - player) % 2 == 0:
                         n.send(str(entry_slot.x))
 
 
