@@ -37,7 +37,11 @@ def threaded_client(conn, p, gameId):
                     if data == "reset":
                         pass
                     elif data != "get":
-                        game.add_disk(Disk(int(data), 0, (255, 0, 0)))
+                        if game.turn % 2 == 0:
+                            colour = (255, 255, 0)
+                        else:
+                            colour = (255, 0, 0)
+                        game.add_disk(Disk(int(data), 0, colour))
 
                     conn.sendall(pickle.dumps(game))
 
