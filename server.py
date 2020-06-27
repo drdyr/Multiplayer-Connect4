@@ -1,9 +1,9 @@
 import socket
 from _thread import *
 import pickle
-from game import Game
+from connect4game import Game, Disk, Slot, EntrySlot
 
-server = "192.168.1.21"
+server = "localhost"
 port = 5555
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -28,19 +28,23 @@ def threaded_client(conn, p, gameId):
     while True:
         try:
             data = conn.recv(4096).decode()
-
+            print(data)
             if gameId in games:
                 game = games[gameId]
-
                 if not data:
                     break
                 else:
                     if data == "reset":
-                        game.resetWent()
+                        pass
                     elif data != "get":
-                        game.play(p, data)
+                        if game.turn % 2 == 0:
+                            colour = (255, 255, 0)
+                        else:
+                            colour = (255, 0, 0)
+                        game.add_disk(Disk(int(data), 0, colour))
 
                     conn.sendall(pickle.dumps(game))
+
             else:
                 break
         except:
@@ -55,18 +59,19 @@ def threaded_client(conn, p, gameId):
     idCount -= 1
     conn.close()
 
+
 while True:
     conn, addr = s.accept()
     print("Connected to:", addr)
 
     idCount += 1
-    p = 0
+    p = 1
     gameId = (idCount - 1)//2
     if idCount % 2 == 1:
         games[gameId] = Game(gameId)
         print("Creating a new game...")
     else:
         games[gameId].ready = True
-        p = 1
+        p = 2
 
     start_new_thread(threaded_client, (conn, p, gameId))
