@@ -25,17 +25,20 @@ def threaded_client(conn, p, gameId):
     global idCount
     conn.send(str.encode(str(p)))
 
-    reply = ""
     while True:
         try:
             data = conn.recv(4096).decode()
-
+            print(data)
             if gameId in games:
                 game = games[gameId]
-
                 if not data:
                     break
                 else:
+                    if data == "reset":
+                        pass
+                    elif data != "get":
+                        game.add_disk(Disk(int(data), 0, (255, 0, 0)))
+
                     conn.sendall(pickle.dumps(game))
 
             else:

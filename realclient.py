@@ -1,6 +1,7 @@
 import pygame
 from realnetwork import Network
 from connect4game import Game, Disk, Slot, EntrySlot
+import pickle
 
 pygame.init()
 
@@ -19,6 +20,7 @@ bottom_text_panel = (0, 620, 700, 100)
 
 
 def draw_screen(screen, game):
+    screen.fill(blue)
     if not game.isReady():
         font = pygame.font.SysFont("comicsans", 80)
         text = font.render("Waiting for Player...", 1, (255, 0, 0), True)
@@ -38,9 +40,8 @@ def main():
 
     while run:
         clock.tick(60)
-        print()
         try:
-            game = n.send("hello")
+            game = n.send("get")
         except:
             run = False
             print("Couldn't get game")
@@ -52,5 +53,10 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
                 pygame.quit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                for entry_slot in game.entry_slots:
+                    if entry_slot.is_cursor() and Disk(entry_slot.x, 0, red) not in game.disks and not game.won:
+                        n.send(str(entry_slot.x))
+
 
 main()

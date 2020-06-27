@@ -20,7 +20,7 @@ class Game:
         return self.ready
 
     def add_disk(self, disk):
-        disk.update()
+        disk.update(self)
         self.disks.append(disk)
         if self.check_win(disk):
             self.won = True
@@ -107,8 +107,8 @@ class Disk:
     def __eq__(self, other):
         return self.x == other.x and self.y == other.y
 
-    def update(self):
-        while self.y < 5 and Disk(self.x, self.y + 1, red) not in board.disks:
+    def update(self, game):
+        while self.y < 5 and Disk(self.x, self.y + 1, red) not in game.disks:
             self.y += 1
 
 white = (255, 255, 255)
