@@ -21,6 +21,8 @@ bottom_text_panel = (0, 620, 700, 100)
 
 def draw_screen(screen, game):
     screen.fill(blue)
+    bottom_text_panel = (0, 620, 700, 100)
+    pygame.draw.rect(screen, grey, bottom_text_panel)
     if not game.isReady():
         font = pygame.font.SysFont("comicsans", 80)
         text = font.render("Waiting for Player...", 1, (255, 0, 0), True)
