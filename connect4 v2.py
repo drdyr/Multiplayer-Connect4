@@ -18,9 +18,7 @@ class Board:
     def add_disk(self, disk):
         disk.update()
         self.disks.append(disk)
-        # if self.check_win(disk):
-        #      pygame.quit()
-        #      sys.exit()
+        print(self.check_win(disk))
 
     def draw(self):
         for slot in self.slots:
@@ -30,29 +28,35 @@ class Board:
         for disk in self.disks:
             disk.draw()
 
-    # def get_neighbours(self, disk):
-    #     neighbours = []
-    #     for i in range(-1, 2):
-    #         for j in range(-1, 2):
-    #             if Disk(disk.x + i, disk.y + j, red) in self.disks and (i != 0 and j != 0):
-    #                 neighbour = self.disks[self.disks.index(Disk(disk.x + i, disk.y + j, red))]
-    #                 if neighbour.colour == disk.colour:
-    #                     neighbours.append(self.disks[self.disks.index(Disk(disk.x + i, disk.y + j, red))])
-    #     return neighbours
-    #
-    # def check_win(self, disk):
-    #     for neighbour in self.get_neighbours(disk):
-    #         if self.diverge(neighbour, neighbour.x - disk.x, neighbour.y - disk.y, 1):
-    #             return True
-    #     return False
-    #
-    # def diverge(self, disk, dir1, dir2, count):
-    #     if count > 4:
-    #         return True
-    #     else:
-    #         check_disk = Disk(disk.x + dir1, disk.y + dir2, red)
-    #         if check_disk in self.disks and self.disks[self.disks.index(check_disk)].colour == disk.colour:
-    #             self.diverge(check_disk, dir1, dir2, count + 1)
+    def check_win(self, disk):
+        count = 0
+        colour = disk.colour
+        next_disk = disk
+        directions = [(0, 1), (1, 1), (1, 0), (1, -1)]
+        for direction in directions:
+            count = 0
+            while next_disk.colour == colour:
+                if Disk(next_disk.x + direction[0], next_disk.y + direction[1], next_disk.colour) in self.disks:
+                    next_disk = self.disks[
+                        self.disks.index(Disk(next_disk.x + direction[0], next_disk.y + direction[1], next_disk.colour))]
+                    if next_disk.colour == colour:
+                        count += 1
+                else:
+                    break
+            next_disk = disk
+            while next_disk.colour == colour:
+                if Disk(next_disk.x + (direction[0] * -1), next_disk.y + (direction[1] * -1), next_disk.colour) in self.disks:
+                    next_disk = self.disks[
+                        self.disks.index(
+                            Disk(next_disk.x + (direction[0] * -1), next_disk.y + (direction[1] * -1), next_disk.colour))]
+                    if next_disk.colour == colour:
+                        count += 1
+                else:
+                    break
+            if count >= 3:
+                return True
+
+        return False
 
 
 class Slot:
