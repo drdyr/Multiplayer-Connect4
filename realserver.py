@@ -1,7 +1,7 @@
 import socket
 from _thread import *
 import pickle
-from game import Game
+from connect4game import Game, Disk, Slot, EntrySlot
 
 server = "192.168.1.21"
 port = 5555
@@ -14,7 +14,6 @@ except socket.error as e:
     str(e)
 
 s.listen(2)
-print("Waiting for a connection, Server Started")
 
 connected = set()
 games = {}
@@ -25,6 +24,7 @@ def threaded_client(conn, p, gameId):
     global idCount
     conn.send(str.encode(str(p)))
 
+    reply = ""
     while True:
         try:
             data = conn.recv(4096).decode()
@@ -36,11 +36,9 @@ def threaded_client(conn, p, gameId):
                     break
                 else:
                     if data == "reset":
-                        game.resetWent()
+                        pass
                     elif data != "get":
-                        game.play(p, data)
-
-                    conn.sendall(pickle.dumps(game))
+                        conn.sendall(pickle.dumps(game))
             else:
                 break
         except:
@@ -54,6 +52,7 @@ def threaded_client(conn, p, gameId):
         pass
     idCount -= 1
     conn.close()
+
 
 while True:
     conn, addr = s.accept()
