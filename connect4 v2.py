@@ -5,6 +5,27 @@ pygame.init()
 clock = pygame.time.Clock()
 
 
+class Board:
+    def __init__(self):
+        self.slots = []
+        self.entry_slots = []
+        self.disks = []
+        for i in range(7):
+            self.entry_slots.append(EntrySlot(i))
+            for j in range(6):
+                self.slots.append(Slot(i, j))
+
+    def add_disk(self, disk):
+        self.disks.append(disk)
+
+    def draw(self):
+        for slot in self.slots:
+            slot.draw()
+        for entry_slot in self.entry_slots:
+            entry_slot.draw()
+        for disk in self.disks:
+            disk.draw()
+
 class Slot:
     def __init__(self, x, y):
         self.x = x
@@ -12,9 +33,13 @@ class Slot:
         self.colour = white
         self.rect = (100 * self.x + 15, 100 * self.y + 15, 70, 70)
 
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
+
     def draw(self):
         self.rect = (100 * self.x + 15, 100 * self.y + 35, 70, 70)
         pygame.draw.ellipse(screen, self.colour, self.rect)
+
 
 class EntrySlot:
     def __init__(self, x):
@@ -35,6 +60,7 @@ class EntrySlot:
     def create_disk(self):
         pass
 
+
 class Disk:
     def __init__(self, x, y, colour):
         self.x = x
@@ -43,8 +69,10 @@ class Disk:
         self.rect = (100 * self.x + 15, 100 * self.y + 15, 70, 70)
 
     def draw(self):
+        print("drawing disk")
         self.rect = (100 * self.x + 15, 100 * self.y + 35, 70, 70)
         pygame.draw.ellipse(screen, self.colour, self.rect)
+
 
 white = (255, 255, 255)
 yellow = (255, 255, 0)
@@ -56,29 +84,8 @@ green = (0, 255, 0)
 
 screen = pygame.display.set_mode((700, 620))
 screen.fill(blue)
-slots = []
-entry_slots = []
-disks = []
 
-def create_grid():
-    for x in range(7):
-        entry_slot = EntrySlot(x)
-        entry_slots.append(entry_slot)
-        for y in range(6):
-            slot = Slot(x, y)
-            slots.append(slot)
-
-def redraw_grid():
-
-    for slot in slots:
-        slot.draw()
-    for entry_slot in entry_slots:
-        entry_slot.draw()
-    for disk in disks:
-        disk.draw()
-
-
-create_grid()
+board = Board()
 
 while True:
     for event in pygame.event.get():
@@ -86,12 +93,10 @@ while True:
             pygame.quit()
             sys.exit()
         if event.type == pygame.MOUSEBUTTONDOWN:
-            for entry_slot in entry_slots:
+            for entry_slot in board.entry_slots:
                 if entry_slot.is_cursor():
-                    disk = Disk(entry_slot.x, 0, red)
-                    disks.append(disk)
+                    board.add_disk(Disk(entry_slot.x, 0, red))
 
-
-    redraw_grid()
+    board.draw()
     pygame.display.flip()
     clock.tick(60)
