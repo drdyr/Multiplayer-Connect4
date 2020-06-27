@@ -57,9 +57,11 @@ class EntrySlot:
     def is_cursor(self):
         return self.x * 100 < pygame.mouse.get_pos()[0] < (self.x + 1) * 100 and 0 < pygame.mouse.get_pos()[1] < 20
 
-    def create_disk(self):
-        pass
 
+def update_disks():
+    for disk in board.disks:
+        disk.update()
+    update_disks()
 
 class Disk:
     def __init__(self, x, y, colour):
@@ -72,6 +74,13 @@ class Disk:
         print("drawing disk")
         self.rect = (100 * self.x + 15, 100 * self.y + 35, 70, 70)
         pygame.draw.ellipse(screen, self.colour, self.rect)
+
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
+
+    def update(self):
+        if self.y < 5 and Disk(self.x, self.y + 1, red) not in board.disks:
+            self.y += 1
 
 
 white = (255, 255, 255)
